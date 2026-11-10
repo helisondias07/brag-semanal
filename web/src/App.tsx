@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import type {
   Claim,
   Contribution,
@@ -52,6 +52,7 @@ export function App() {
   });
   const [noteDraft, setNoteDraft] = useState<Record<string, string>>({});
   const [saveMsg, setSaveMsg] = useState("Decisões ficam neste navegador (localStorage) e, se a API local responder, em .local/review-state.json. Sem rede externa, sem publicação.");
+  const [exportPreview, setExportPreview] = useState<string>("");
 
   useEffect(() => {
     const local = localStorage.getItem(LS_KEY);
@@ -103,7 +104,7 @@ export function App() {
     });
   }
 
-  async function persist() {
+  async function persist(): Promise<ReviewState> {
     const next: ReviewState = {
       ...review,
       persistence: "local-only",
@@ -126,16 +127,40 @@ export function App() {
     } catch {
       setSaveMsg("Salvo só no localStorage deste navegador (API local indisponível). Nada foi publicado.");
     }
+    return next;
   }
 
-  function downloadMd() {
-    if (!data) return;
-    const blob = new Blob([data.markdown], { type: "text/markdown;charset=utf-8" });
+  async function loadExportPreview(): Promise<string> {
+    await persist();
+    const text = await fetch("/api/export.md").then((r) => r.text());
+    setExportPreview(text);
+    return text;
+  }
+
+  async function downloadMd() {
+    const text = await loadExportPreview();
+    const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
     a.download = "brag-semanal-sintetico.md";
     a.click();
     URL.revokeObjectURL(a.href);
+  }
+
+  function onTabKey(event: KeyboardEvent<HTMLElement>) {
+    if (event.key !== "ArrowRight" && event.key !== "ArrowLeft" && event.key !== "Home" && event.key !== "End") {
+      return;
+    }
+    event.preventDefault();
+    const idx = PANELS.findIndex((p) => p.id === panel);
+    let next = idx;
+    if (event.key === "ArrowRight") next = (idx + 1) % PANELS.length;
+    if (event.key === "ArrowLeft") next = (idx - 1 + PANELS.length) % PANELS.length;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = PANELS.length - 1;
+    const id = PANELS[next].id;
+    setPanel(id);
+    document.getElementById(`tab-${id}`)?.focus();
   }
 
   if (error) {
@@ -172,7 +197,7 @@ export function App() {
       <div className="banner" role="note">
         DADOS FICTÍCIOS / SYNTHETIC FIXTURES — este rascunho não descreve realizações reais de Helison
         Dias. Fontes: arquivos locais rotulados synthetic-fixture. Adaptadores GitHub e ClickUp:
-        inativos. Nada é enviado ou publicado.
+        desligados, sem conta e sem live. Nada é enviado ou publicado.
       </div>
       <div className="shell">
         <header className="masthead">
@@ -188,14 +213,14 @@ export function App() {
           <div className="meta" aria-label="Metadados da demo">
             <span className="chip">Período {draft.period.startInclusive} → {draft.period.endExclusive}</span>
             <span className="chip">{draft.period.timeZone}</span>
-            <span className="chip off">GitHub inativo</span>
-            <span className="chip off">ClickUp inativo</span>
+            <span className="chip off">GitHub desligado</span>
+            <span className="chip off">ClickUp desligado</span>
             <span className="chip off">Sem Notion</span>
             <span className="chip">Revisão humana obrigatória</span>
           </div>
         </header>
 
-        <nav className="tabs" role="tablist" aria-label="Seções do rascunho">
+        <nav className="tabs" role="tablist" aria-label="Seções do rascunho" onKeyDown={onTabKey}>
           {PANELS.map((p) => (
             <button
               key={p.id}
@@ -204,7 +229,11 @@ export function App() {
               aria-selected={panel === p.id}
               id={`tab-${p.id}`}
               aria-controls={`panel-${p.id}`}
-              onClick={() => setPanel(p.id)}
+              tabIndex={panel === p.id ? 0 : -1}
+              onClick={() => {
+                setPanel(p.id);
+                if (p.id === "export") void loadExportPreview();
+              }}
             >
               {p.label}
             </button>
@@ -315,7 +344,7 @@ export function App() {
                     Abrir /api/export.md
                   </a>
                 </div>
-                <pre>{draft.disclaimer + "\n\n" + data.markdown}</pre>
+                <pre data-testid="export-preview">{exportPreview || draft.disclaimer + "\n\n" + data.markdown}</pre>
               </article>
             </section>
           </main>

@@ -30,7 +30,7 @@ export function exportMarkdown(draft: ReviewableDraft, review?: ReviewState): st
   lines.push(`- Sujeito do rascunho: ${escapeMarkdown(d.subject)} (dados fictícios)`);
   lines.push(`- Período: \`${d.period.startInclusive}\` ≤ evento < \`${d.period.endExclusive}\` (${d.period.timeZone})`);
   lines.push("- Evento qualificável: PR=`mergedAt`, commit=`committedAt`, tarefa=`completedAt`, anotação=`createdAt`. `updatedAt` fora/dentro da janela não prova entrega.");
-  lines.push("- Fontes: fixtures sintéticas rotuladas `synthetic-fixture`. Adaptadores GitHub/ClickUp inativos.");
+  lines.push("- Fontes: fixtures sintéticas rotuladas `synthetic-fixture`. Adaptadores GitHub/ClickUp desligados (sem live).");
   lines.push(`- Gerado em: \`${d.generatedAt}\` (relógio determinístico de pipeline)`);
   lines.push(`- Publicação automática: ${d.autoPublish ? "sim" : "não"}`);
   lines.push(`- Revisão humana: ${d.humanReviewRequired ? "obrigatória" : "não"}`);

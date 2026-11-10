@@ -19,11 +19,22 @@ Este MVP é autoral e mais estreito: **não** conecta APIs reais, **não** agend
 
 ## Testes (executados nesta entrega)
 
-Os testes automatizados **não** substituem revisão humana independente. Foram corridos neste ambiente: Vitest (pipeline, adapters, redação, smoke HTTP da demo), `tsc`, `vite build`, CLI `generate`/`smoke`, e capturas Playwright reais da UI em viewport desktop e mobile.
+Os testes automatizados **não** substituem revisão humana independente nem auditoria de acessibilidade.
+
+- Vitest de pipeline/adapters/redação/smoke HTTP.
+- Teste Playwright de UI: incluir/excluir/nota/revisar, consistência no Markdown exportado, Tab/setas no tablist, foco visível observado no teste, overflow horizontal em 1280×800 e 390×844.
+- `tsc`, `vite build`, CLI `generate`/`smoke`.
+- Capturas de viewport (não página inteira).
+
+Não testado: leitores de tela, zoom 200%, daltonismo, contraste WCAG em toda a paleta da página, toque real em dispositivo físico, Safari/Firefox, arrastar com pointer apenas.
+
+Contraste: **medido a partir dos tokens CSS** (não auditado na captura): texto `--ink #161410` sobre `--paper #f3eee3`; chip desligado `--copper #b5471d` sobre `--copper-soft #f0d7c8`; foco `--focus #0a53c4`. Não é certificação WCAG.
+
+Chip GitHub: o source **nunca** teve o rótulo `GitHub Ativo`. O texto era `GitHub inativo` (classe `chip off`). “inativo” contém o substring visual “ativo”, o que pode explicar a suspeita na captura mobile de página inteira. Rótulo atual: `GitHub desligado`.
 
 ## Limitações
 
-- Sem leitura real de GitHub/ClickUp.
+- Sem leitura real de GitHub/ClickUp (adaptadores desligados).
 - Sem consolidação histórica multi-semana além da janela da fixture.
 - Sem editor rico nem colaboração.
 - Persistência local não é backup cifrado.

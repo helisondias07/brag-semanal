@@ -29,7 +29,8 @@
 }
 
 * { box-sizing: border-box; }
-html, body, #root { min-height: 100%; margin: 0; }
+html, body, #root { min-height: 100%; margin: 0; max-width: 100%; }
+html, body { overflow-x: hidden; }
 body { background: radial-gradient(1200px 500px at 10% -10%, #fffaf0, var(--paper)); }
 
 .skip-link {
@@ -50,6 +51,7 @@ body { background: radial-gradient(1200px 500px at 10% -10%, #fffaf0, var(--pape
   padding: 0.7rem 1.2rem;
   font-weight: 650;
   letter-spacing: 0.01em;
+  overflow-wrap: anywhere;
 }
 
 .shell { max-width: 1180px; margin: 0 auto; padding: 1.25rem 1.1rem 3rem; }
@@ -91,6 +93,8 @@ h1 {
   padding: 0.28rem 0.55rem;
   font-size: 0.75rem;
   font-weight: 650;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 .chip.off { background: var(--copper-soft); color: var(--copper); border-color: #e0b39a; }
 
@@ -255,6 +259,7 @@ aside.inspector { position: sticky; top: 0.6rem; }
   padding: 1rem;
   overflow: auto;
   max-height: 28rem;
+  max-width: 100%;
 }
 
 :focus-visible {
