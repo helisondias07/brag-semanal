@@ -93,6 +93,31 @@ describe("evidência e atribuição", () => {
     expect(result.draft.learnings.some((l) => l.id === "learn-L-02")).toBe(false);
     expect(result.markdown).not.toMatch(/TypeScript me ensinou/i);
   });
+
+  it("PR aberto não vira fato de merge (mergedAt inconsistente não prova entrega)", () => {
+    const b = bundle();
+    const open: RawRecord = {
+      sourceKind: "github_pr",
+      sourceLabel: "synthetic-fixture",
+      nativeId: "open-99",
+      scope: "synthetic-org/app",
+      title: "PR aberto sintético",
+      state: "open",
+      timestamps: { mergedAt: "2026-02-05T12:00:00-03:00", createdAt: "2026-02-04T12:00:00-03:00" },
+      actors: { authorLogin: SUBJECT },
+    };
+    const result = runPipeline([open], {
+      period: b.period,
+      subjectLogin: SUBJECT,
+      subjectDisplayName: "Helison Dias",
+      nowIso: b.nowIso,
+    });
+    expect(result.draft.contributions.some((c) => c.memberIdentities.some((m) => m.includes("open-99")))).toBe(false);
+    expect(result.draft.facts.some((f) => f.text.includes("PR sintético open-99") && f.text.includes("merged"))).toBe(
+      false,
+    );
+    expect(result.draft.rejectedAsAchievement.some((r) => r.identity.includes("open-99"))).toBe(true);
+  });
 });
 
 describe("períodos e timezone", () => {

@@ -50,7 +50,7 @@ export interface Learning {
 export interface Draft {
   disclaimer: string;
   subject: string;
-  period: { timeZone: string; startInclusive: string; endExclusive: string };
+  period: { timeZone: "America/Sao_Paulo"; startInclusive: string; endExclusive: string };
   generatedAt: string;
   humanReviewRequired: true;
   autoPublish: false;

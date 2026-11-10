@@ -101,16 +101,10 @@ export function contributionCandidates(
               mergedEv.map((e) => e.id),
             ),
           );
-        } else if (m.state === "open" || !m.timestamps.mergedAt) {
-          uncertainties.push(
-            claim(
-              `c-${++n}`,
-              "uncertainty",
-              `PR sintético ${m.nativeId} não tem evidência de merge/conclusão na janela; título ou assignee não provam entrega.`,
-              m.evidence.map((e) => e.id),
-            ),
-          );
         }
+        // PRs abertos: o evento qualificável é mergedAt, então state=open sem merge
+        // comprovado não entra em inWindowMembers. state=open com mergedAt inconsistente
+        // não gera fato de merge (exige state===merged). Sem fato, o cluster é rejeitado.
       }
       if (m.sourceKind === "github_commit") {
         const ev = m.evidence.filter((e) => e.field === "timestamps.committedAt");

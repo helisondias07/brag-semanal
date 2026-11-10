@@ -28,7 +28,7 @@ Os testes automatizados **não** substituem revisão humana independente nem aud
 
 Não testado: leitores de tela, zoom 200%, daltonismo, contraste WCAG em toda a paleta da página, toque real em dispositivo físico, Safari/Firefox, arrastar com pointer apenas.
 
-Contraste: **medido a partir dos tokens CSS** (não auditado na captura): texto `--ink #161410` sobre `--paper #f3eee3`; chip desligado `--copper #b5471d` sobre `--copper-soft #f0d7c8`; foco `--focus #0a53c4`. Não é certificação WCAG.
+Contraste do chip `.off`: texto `#6a220e` sobre fundo `#f0d7c8` → **8.26:1** (rel. lum. WCAG 2.x; meta ≥ 4.5:1). Medido nos tokens, não é auditoria WCAG da página. Texto corrido `--ink #161410` sobre `--paper #f3eee3`.
 
 Chip GitHub: o source **nunca** teve o rótulo `GitHub Ativo`. O texto era `GitHub inativo` (classe `chip off`). “inativo” contém o substring visual “ativo”, o que pode explicar a suspeita na captura mobile de página inteira. Rótulo atual: `GitHub desligado`.
 

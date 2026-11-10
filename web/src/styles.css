@@ -96,7 +96,8 @@ h1 {
   max-width: 100%;
   overflow-wrap: anywhere;
 }
-.chip.off { background: var(--copper-soft); color: var(--copper); border-color: #e0b39a; }
+/* Chip desligado: #6a220e sobre #f0d7c8 → contraste 8.26:1 (rel. lum. WCAG 2.x), ≥ 4.5:1. */
+.chip.off { background: #f0d7c8; color: #6a220e; border-color: #c48a70; }
 
 nav.tabs {
   display: flex;

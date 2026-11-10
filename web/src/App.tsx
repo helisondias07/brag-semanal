@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
+import { exportMarkdown } from "../../src/exportMarkdown.ts";
 import type {
   Claim,
   Contribution,
@@ -52,7 +53,6 @@ export function App() {
   });
   const [noteDraft, setNoteDraft] = useState<Record<string, string>>({});
   const [saveMsg, setSaveMsg] = useState("Decisões ficam neste navegador (localStorage) e, se a API local responder, em .local/review-state.json. Sem rede externa, sem publicação.");
-  const [exportPreview, setExportPreview] = useState<string>("");
 
   useEffect(() => {
     const local = localStorage.getItem(LS_KEY);
@@ -130,15 +130,13 @@ export function App() {
     return next;
   }
 
-  async function loadExportPreview(): Promise<string> {
+  async function persistForExport(): Promise<void> {
     await persist();
-    const text = await fetch("/api/export.md").then((r) => r.text());
-    setExportPreview(text);
-    return text;
   }
 
   async function downloadMd() {
-    const text = await loadExportPreview();
+    await persist();
+    const text = reviewedMarkdown;
     const blob = new Blob([text], { type: "text/markdown;charset=utf-8" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -192,6 +190,15 @@ export function App() {
   const selectedLearning = draft.learnings.find((l) => l.id === selected);
   const selectedItem = draft.items.find((i) => i.identity === selected);
 
+  const reviewForExport: ReviewState = {
+    ...review,
+    decisions: review.decisions.map((d) => ({
+      ...d,
+      note: noteDraft[d.targetId] ?? d.note,
+    })),
+  };
+  const reviewedMarkdown = exportMarkdown(draft as Parameters<typeof exportMarkdown>[0], reviewForExport);
+
   return (
     <>
       <div className="banner" role="note">
@@ -232,7 +239,7 @@ export function App() {
               tabIndex={panel === p.id ? 0 : -1}
               onClick={() => {
                 setPanel(p.id);
-                if (p.id === "export") void loadExportPreview();
+                if (p.id === "export") void persistForExport();
               }}
             >
               {p.label}
@@ -243,9 +250,9 @@ export function App() {
         <div className="layout">
           <main id="conteudo">
             <section
-              id={`panel-${panel}`}
+              id="panel-contrib"
               role="tabpanel"
-              aria-labelledby={`tab-${panel}`}
+              aria-labelledby="tab-contrib"
               hidden={panel !== "contrib"}
             >
               {draft.contributions.length === 0 ? (
@@ -267,7 +274,7 @@ export function App() {
               )}
             </section>
 
-            <section role="tabpanel" hidden={panel !== "learn"} aria-labelledby="tab-learn">
+            <section id="panel-learn" role="tabpanel" hidden={panel !== "learn"} aria-labelledby="tab-learn">
               {draft.learnings.length === 0 ? (
                 <div className="status">
                   Nenhum aprendizado. Tecnologia em título de PR/tarefa não é inferida.
@@ -291,7 +298,7 @@ export function App() {
               )}
             </section>
 
-            <section role="tabpanel" hidden={panel !== "reject"} aria-labelledby="tab-reject">
+            <section id="panel-reject" role="tabpanel" hidden={panel !== "reject"} aria-labelledby="tab-reject">
               <article className="card">
                 <h2>Itens que não viraram conquista</h2>
                 <p>Assigned, título ou update fora do evento qualificável não provam entrega.</p>
@@ -305,7 +312,7 @@ export function App() {
               </article>
             </section>
 
-            <section role="tabpanel" hidden={panel !== "evidence"} aria-labelledby="tab-evidence">
+            <section id="panel-evidence" role="tabpanel" hidden={panel !== "evidence"} aria-labelledby="tab-evidence">
               {draft.items.map((item) => (
                 <article key={item.identity} className="card">
                   <span className="badge synthetic">{item.sourceLabel}</span>
@@ -329,7 +336,7 @@ export function App() {
               ))}
             </section>
 
-            <section role="tabpanel" hidden={panel !== "export"} aria-labelledby="tab-export">
+            <section id="panel-export" role="tabpanel" hidden={panel !== "export"} aria-labelledby="tab-export">
               <article className="card export-box">
                 <h2>Exportação Markdown local</h2>
                 <p>
@@ -344,7 +351,9 @@ export function App() {
                     Abrir /api/export.md
                   </a>
                 </div>
-                <pre data-testid="export-preview">{exportPreview || draft.disclaimer + "\n\n" + data.markdown}</pre>
+                <pre data-testid="export-preview" data-review-applied="true">
+                  {reviewedMarkdown}
+                </pre>
               </article>
             </section>
           </main>

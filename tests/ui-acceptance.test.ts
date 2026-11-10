@@ -23,7 +23,10 @@ async function overflow(page: Page) {
 describe("aceite UI (teclado, revisão, export, viewport)", () => {
   beforeAll(async () => {
     const { execSync } = await import("node:child_process");
-    execSync("npm run build:web", { stdio: "inherit" });
+    execSync("npm run build:web", {
+      stdio: "inherit",
+      env: { ...process.env, NODE_ENV: "production" },
+    });
     demo = await startDemo({
       port: 43144,
       fixturesDir: "fixtures",
@@ -89,11 +92,20 @@ describe("aceite UI (teclado, revisão, export, viewport)", () => {
       await secondCard.getByRole("radio", { name: "Incluir" }).check();
       rec(`included ${secondId} with note`);
 
+      for (const id of ["panel-contrib", "panel-learn", "panel-reject", "panel-evidence", "panel-export"]) {
+        expect(await desktop.locator(`#${id}`).count()).toBe(1);
+        expect(await desktop.locator(`[aria-controls="${id}"]`).count()).toBe(1);
+      }
+
       await desktop.getByRole("button", { name: "Salvar decisões localmente" }).click();
       await desktop.getByRole("tab", { name: "Exportar Markdown" }).click();
       await desktop.waitForFunction(
-        (id) => (document.querySelector("[data-testid=export-preview]")?.textContent ?? "").includes(id),
-        secondId,
+        ([excluded, included]) => {
+          const el = document.querySelector("[data-testid=export-preview]");
+          const t = el?.textContent ?? "";
+          return el?.getAttribute("data-review-applied") === "true" && !t.includes(excluded) && t.includes(included);
+        },
+        [firstId, secondId],
       );
       const preview = await desktop.getByTestId("export-preview").innerText();
       expect(preview).not.toContain(firstId);
