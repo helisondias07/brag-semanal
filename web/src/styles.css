@@ -30,8 +30,8 @@
 
 * { box-sizing: border-box; }
 html, body, #root { min-height: 100%; margin: 0; max-width: 100%; }
-html, body { overflow-x: hidden; }
-body { background: radial-gradient(1200px 500px at 10% -10%, #fffaf0, var(--paper)); }
+html { overflow-x: auto; }
+body { background: radial-gradient(1200px 500px at 10% -10%, #fffaf0, var(--paper)); overflow-wrap: anywhere; }
 
 .skip-link {
   position: absolute;
@@ -133,10 +133,11 @@ nav.tabs button[aria-selected="true"] {
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   gap: 1.1rem;
   align-items: start;
 }
+.layout > * { min-width: 0; max-width: 100%; }
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; }
   .masthead { grid-template-columns: 1fr; }
@@ -261,8 +262,11 @@ aside.inspector { position: sticky; top: 0.6rem; }
 }
 .status.error { border-color: var(--danger); background: #f8e4e0; }
 
+.export-box { min-width: 0; max-width: 100%; }
 .export-box pre {
   white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
   font-family: var(--mono);
   font-size: 0.78rem;
   background: var(--pine-2);

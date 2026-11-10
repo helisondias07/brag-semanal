@@ -153,11 +153,27 @@ describe("E2E do build estático (sem backend)", () => {
     rec(`request count=${allUrls.length}`);
     expect(apiHits, `requisições /api: ${apiHits.join(", ")}`).toHaveLength(0);
 
-    await page.setViewportSize({ width: 1440, height: 900 });
+    const tabNames = ["Contribuições", "Aprendizados", "Não-conquistas", "Evidências", "Exportar Markdown"] as const;
+    async function assertNoPageOverflow(width: number, height: number) {
+      await page.setViewportSize({ width, height });
+      for (const name of tabNames) {
+        await page.getByRole("tab", { name }).click();
+        const dims = await page.evaluate(() => ({
+          scrollWidth: document.documentElement.scrollWidth,
+          clientWidth: document.documentElement.clientWidth,
+        }));
+        rec(`overflow ${width}px tab=${name} scrollWidth=${dims.scrollWidth} clientWidth=${dims.clientWidth}`);
+        expect(dims.scrollWidth, `${width}px ${name}`).toBeLessThanOrEqual(dims.clientWidth);
+      }
+    }
+
+    await assertNoPageOverflow(1440, 900);
+    await page.getByRole("tab", { name: "Exportar Markdown" }).click();
     await page.screenshot({ path: "/tmp/brag-static-desktop-1440.png", fullPage: true });
-    await page.setViewportSize({ width: 390, height: 844 });
+    await assertNoPageOverflow(390, 844);
+    await page.getByRole("tab", { name: "Exportar Markdown" }).click();
     await page.screenshot({ path: "/tmp/brag-static-mobile-390.png", fullPage: true });
-    rec("screenshots /tmp/brag-static-desktop-1440.png /tmp/brag-static-mobile-390.png");
+    rec("screenshots /tmp/brag-static-desktop-1440.png /tmp/brag-static-mobile-390.png (aba Exportar)");
 
     await browser.close();
   }, 180000);

@@ -11,7 +11,8 @@ Slug sugerido para um checkout futuro: `brag-semanal`. Destino eventual em disco
 ## Requisitos
 
 - Node.js 20+
-- Dependências: `typescript`, `tsx`, `vitest`, `vite`, `react`, `playwright` (dev). Sem chaves de LLM.
+- Dependências: `typescript`, `tsx`, `vitest`, `vite`, `react`, `playwright`, `eslint` 9.x (dev). Sem chaves de LLM.
+- `npm ci` (sem `--force` e sem `--legacy-peer-deps`). `overrides.minimatch` = `11.0.6` (advisory GHSA-g3hv-75wg-m249: minimatch `>=7 <11.0.1`). ESLint permanece em 9.39.x: a linha 10 (`>=10.0.0-alpha.0`) entra no mesmo advisory via minimatch/`@eslint/config-array`; no registry ainda não há `typescript-eslint` estável `>8.72.2`.
 
 ## Comandos
 
