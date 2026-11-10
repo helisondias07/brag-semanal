@@ -1,0 +1,18 @@
+[
+  {
+    "from": { "sourceKind": "github_pr", "scope": "synthetic-org/app", "nativeId": "12" },
+    "to": { "sourceKind": "github_commit", "scope": "synthetic-org/app", "nativeId": "a1b2c3d" }
+  },
+  {
+    "from": { "sourceKind": "github_pr", "scope": "synthetic-org/app", "nativeId": "12" },
+    "to": { "sourceKind": "github_commit", "scope": "synthetic-org/app", "nativeId": "e4f5g6h" }
+  },
+  {
+    "from": { "sourceKind": "github_pr", "scope": "synthetic-org/app", "nativeId": "12" },
+    "to": { "sourceKind": "clickup_task", "scope": "synthetic-space/sprint-board", "nativeId": "T-100" }
+  },
+  {
+    "from": { "sourceKind": "annotation", "scope": "synthetic-org/app", "nativeId": "L-01" },
+    "to": { "sourceKind": "github_pr", "scope": "synthetic-org/app", "nativeId": "12" }
+  }
+]

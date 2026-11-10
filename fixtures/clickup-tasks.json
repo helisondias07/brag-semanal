@@ -1,0 +1,53 @@
+[
+  {
+    "sourceKind": "clickup_task",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "T-100",
+    "scope": "synthetic-space/sprint-board",
+    "title": "Corrigir timeout da API de pedidos",
+    "body": "Associada explicitamente ao PR 12. Bearer FAKESECRET_y3z4a5b6c7d8e9f0g1h2",
+    "url": "https://clickup.example.invalid/t/T-100",
+    "state": "complete",
+    "timestamps": {
+      "createdAt": "2026-02-03T09:00:00-03:00",
+      "completedAt": "2026-02-05T15:10:00-03:00",
+      "updatedAt": "2026-02-05T15:12:00-03:00"
+    },
+    "actors": {
+      "assignees": ["helison-synthetic"]
+    }
+  },
+  {
+    "sourceKind": "clickup_task",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "T-200",
+    "scope": "synthetic-space/sprint-board",
+    "title": "Assigned sem complete",
+    "body": "Assignee na janela sem completedAt — não é conquista.",
+    "url": "https://clickup.example.invalid/t/T-200",
+    "state": "in_progress",
+    "timestamps": {
+      "createdAt": "2026-02-04T09:00:00-03:00",
+      "updatedAt": "2026-02-08T09:00:00-03:00"
+    },
+    "actors": {
+      "assignees": ["helison-synthetic"]
+    }
+  },
+  {
+    "sourceKind": "clickup_task",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "T-300",
+    "scope": "synthetic-space/sprint-board",
+    "title": "Entrega compartilhada de documentação",
+    "body": "Múltiplos assignees: resultado de equipe.",
+    "url": "https://clickup.example.invalid/t/T-300",
+    "state": "complete",
+    "timestamps": {
+      "completedAt": "2026-02-06T16:45:00-03:00"
+    },
+    "actors": {
+      "assignees": ["helison-synthetic", "teammate-synthetic"]
+    }
+  }
+]

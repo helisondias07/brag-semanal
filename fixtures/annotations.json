@@ -1,0 +1,37 @@
+[
+  {
+    "sourceKind": "annotation",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "L-01",
+    "scope": "synthetic-org/app",
+    "title": "Anotação explícita de aprendizado",
+    "annotationKind": "learning",
+    "claim": "Anotação explícita: retries com jitter reduziram timeouts na fixture (não inferido do título do PR).",
+    "timestamps": {
+      "createdAt": "2026-02-06T10:00:00-03:00"
+    }
+  },
+  {
+    "sourceKind": "annotation",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "L-02",
+    "scope": "synthetic-org/app",
+    "title": "Anotação sem claim",
+    "annotationKind": "learning",
+    "timestamps": {
+      "createdAt": "2026-02-06T11:00:00-03:00"
+    }
+  },
+  {
+    "sourceKind": "annotation",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "N-01",
+    "scope": "synthetic-org/app",
+    "title": "Nota editorial",
+    "annotationKind": "note",
+    "claim": "Isto é nota, não aprendizado.",
+    "timestamps": {
+      "createdAt": "2026-02-06T12:00:00-03:00"
+    }
+  }
+]

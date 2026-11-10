@@ -1,0 +1,11 @@
+{
+  "period": {
+    "timeZone": "America/Sao_Paulo",
+    "startInclusive": "2026-02-02T00:00:00-03:00",
+    "endExclusive": "2026-02-09T00:00:00-03:00"
+  },
+  "subjectLogin": "helison-synthetic",
+  "subjectDisplayName": "Helison Dias",
+  "nowIso": "2026-02-09T12:00:00.000Z",
+  "disclaimer": "DADOS FICTÍCIOS. Estas fixtures não descrevem PRs, commits, tarefas ou aprendizados reais de Helison Dias."
+}

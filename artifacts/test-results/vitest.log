@@ -1,0 +1,30 @@
+
+> brag-semanal@0.1.0 test
+> vitest run --reporter=verbose
+
+
+ RUN  v3.2.7 /workspace
+
+ ✓ tests/redact.test.ts > redaction isolada > redige texto e URLs incluindo query/userinfo 3ms
+demo local (fixtures sintéticas, sem publicação): http://127.0.0.1:43142
+ ✓ tests/pipeline.test.ts > normalização de 3 fontes > normaliza PR, commit e tarefa com identidade estável e rótulo sintético 16ms
+ ✓ tests/pipeline.test.ts > deduplicação > colapsa a mesma identidade e associações explícitas cross-source, sem fundir títulos parecidos 6ms
+ ✓ tests/pipeline.test.ts > evidência e atribuição > toda afirmação factual aponta IDs e fonte sintética 3ms
+ ✓ tests/pipeline.test.ts > evidência e atribuição > distingue autoria individual, participação e resultado de equipe 3ms
+ ✓ tests/pipeline.test.ts > evidência e atribuição > vazio/incompleto não vira conquista; aprendizado exige anotação 3ms
+ ✓ tests/pipeline.test.ts > períodos e timezone > America/Sao_Paulo, fronteiras inclusiva/exclusiva, update fora não prova entrega 2ms
+ ✓ tests/pipeline.test.ts > redaction e export > redige tokens, e-mail, query e userinfo; rejeita javascript:; não deixa token no markdown/log 4ms
+ ✓ tests/pipeline.test.ts > redaction e export > saída determinística na reexecução 7ms
+ ✓ tests/pipeline.test.ts > redaction e export > export markdown e revisão local exclui item 3ms
+ ✓ tests/pipeline.test.ts > validação > recusa período invertido 1ms
+ ✓ tests/demo-smoke.test.ts > smoke da demo/CLI HTTP > serve health, draft sintético e recusa publish 67ms
+ ✓ tests/adapters.test.ts > adaptadores somente leitura inativos > GitHub e ClickUp recusam fetch sem allowlist/enable 1ms
+ ✓ tests/adapters.test.ts > adaptadores somente leitura inativos > transporte live não dispara rede 0ms
+ ✓ tests/adapters.test.ts > adaptadores somente leitura inativos > fixture + allowlist filtra escopo sem HTTP 1ms
+
+ Test Files  4 passed (4)
+      Tests  15 passed (15)
+   Start at  00:15:58
+   Duration  368ms (transform 194ms, setup 0ms, collect 309ms, tests 125ms, environment 0ms, prepare 195ms)
+
+TEST_EXIT:0

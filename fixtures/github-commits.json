@@ -1,0 +1,48 @@
+[
+  {
+    "sourceKind": "github_commit",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "a1b2c3d",
+    "scope": "synthetic-org/app",
+    "title": "timeout: retry na API de pedidos",
+    "body": "Commit associado explicitamente ao PR 12.",
+    "url": "https://github.example.invalid/synthetic-org/app/commit/a1b2c3d",
+    "timestamps": {
+      "committedAt": "2026-02-05T14:40:00-03:00"
+    },
+    "actors": {
+      "authorLogin": "helison-synthetic",
+      "committerLogin": "helison-synthetic"
+    }
+  },
+  {
+    "sourceKind": "github_commit",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "e4f5g6h",
+    "scope": "synthetic-org/app",
+    "title": "timeout: testes",
+    "body": "Segundo commit do mesmo PR 12 — squash não deve duplicar impacto.",
+    "url": "https://github.example.invalid/synthetic-org/app/commit/e4f5g6h",
+    "timestamps": {
+      "committedAt": "2026-02-05T14:55:00-03:00"
+    },
+    "actors": {
+      "authorLogin": "helison-synthetic"
+    }
+  },
+  {
+    "sourceKind": "github_commit",
+    "sourceLabel": "synthetic-fixture",
+    "nativeId": "orphan99",
+    "scope": "synthetic-org/app",
+    "title": "Commit órfão sem ticket/PR",
+    "body": "Fato de commit na janela; não inferir entrega de produto.",
+    "url": "https://github.example.invalid/synthetic-org/app/commit/orphan99",
+    "timestamps": {
+      "committedAt": "2026-02-03T21:00:00-03:00"
+    },
+    "actors": {
+      "authorLogin": "helison-synthetic"
+    }
+  }
+]
