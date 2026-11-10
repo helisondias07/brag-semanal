@@ -54,6 +54,16 @@ body { background: radial-gradient(1200px 500px at 10% -10%, #fffaf0, var(--pape
   overflow-wrap: anywhere;
 }
 
+/* Aviso modo estático: #1a1408 sobre #fff4cc → 16.3:1 (WCAG 2.x rel. lum.), ≥ 4.5:1 */
+.static-notice {
+  background: #fff4cc;
+  color: #1a1408;
+  border-bottom: 3px solid #6a220e;
+  padding: 0.75rem 1.2rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
 .shell { max-width: 1180px; margin: 0 auto; padding: 1.25rem 1.1rem 3rem; }
 
 .masthead {

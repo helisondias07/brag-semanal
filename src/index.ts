@@ -2,6 +2,7 @@ export { SYNTHETIC_DISCLAIMER } from "./types.ts";
 export type * from "./types.ts";
 export { runPipeline, pipelineFingerprint } from "./pipeline.ts";
 export { loadFixtures } from "./loadFixtures.ts";
+export { assembleFixtures } from "./assembleFixtures.ts";
 export { exportMarkdown, applyReview, stableStringify } from "./exportMarkdown.ts";
 export { normalizeAll, resetEvidenceSeq } from "./normalize.ts";
 export { clusterItems } from "./dedup.ts";

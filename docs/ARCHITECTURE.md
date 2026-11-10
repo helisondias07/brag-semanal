@@ -25,6 +25,7 @@ Decisões:
 - Commits ligados a um PR não geram impacto separado.
 - Aprendizado só com anotação explícita e evidência.
 - Adaptadores GitHub/ClickUp: contratos somente leitura, inativos, testes com fixtures. Live HTTP não implementado.
-- Persistência de revisão: `localStorage` e `.local/review-state.json`. Sem publicação.
+- Persistência de revisão: `localStorage` e, no `npm run demo`, `.local/review-state.json`. Sem publicação.
+- Modo estático (`VITE_STATIC_DEMO=true`, saída `web/dist-static`): pipeline no browser, fixtures embutidas, só `localStorage` versionado. Sem `/api`.
 
 Slug sugerido para um futuro diretório de source (não clonado por este agente): `brag-semanal`.

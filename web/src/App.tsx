@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import { exportMarkdown } from "../../src/exportMarkdown.ts";
+import { emptyReviewState } from "../../src/reviewCore.ts";
+import { runEmbeddedSyntheticPipeline } from "./staticPipeline";
 import type {
   Claim,
   Contribution,
@@ -10,7 +12,8 @@ import type {
   ReviewStatus,
 } from "./types";
 
-const LS_KEY = "brag-semanal-review-v1";
+const STATIC = import.meta.env.VITE_STATIC_DEMO === "true";
+const LS_KEY = STATIC ? "brag-semanal-static-review-v1" : "brag-semanal-review-v1";
 const PANELS = [
   { id: "contrib", label: "Contribuições" },
   { id: "learn", label: "Aprendizados" },
@@ -52,7 +55,11 @@ export function App() {
     decisions: [],
   });
   const [noteDraft, setNoteDraft] = useState<Record<string, string>>({});
-  const [saveMsg, setSaveMsg] = useState("Decisões ficam neste navegador (localStorage) e, se a API local responder, em .local/review-state.json. Sem rede externa, sem publicação.");
+  const [saveMsg, setSaveMsg] = useState(
+    STATIC
+      ? "Modo estático: decisões só neste navegador (localStorage). Nada é enviado."
+      : "Decisões ficam neste navegador (localStorage) e, se a API local responder, em .local/review-state.json. Sem rede externa, sem publicação.",
+  );
 
   useEffect(() => {
     const local = localStorage.getItem(LS_KEY);
@@ -62,6 +69,16 @@ export function App() {
       } catch {
         /* ignore */
       }
+    }
+    if (STATIC) {
+      try {
+        const json = runEmbeddedSyntheticPipeline();
+        setData(json);
+        setSelected(json.draft.contributions[0]?.id ?? json.draft.learnings[0]?.id ?? null);
+      } catch (e: unknown) {
+        setError(e instanceof Error ? e.message : String(e));
+      }
+      return;
     }
     fetch("/api/draft")
       .then(async (r) => {
@@ -116,6 +133,10 @@ export function App() {
     };
     localStorage.setItem(LS_KEY, JSON.stringify(next));
     setReview(next);
+    if (STATIC) {
+      setSaveMsg("Salvo só no localStorage (modo estático, chave versionada). Nada foi publicado.");
+      return next;
+    }
     try {
       const r = await fetch("/api/review-state", {
         method: "PUT",
@@ -128,6 +149,13 @@ export function App() {
       setSaveMsg("Salvo só no localStorage deste navegador (API local indisponível). Nada foi publicado.");
     }
     return next;
+  }
+
+  function resetReview(): void {
+    localStorage.removeItem(LS_KEY);
+    setReview(emptyReviewState());
+    setNoteDraft({});
+    setSaveMsg("Revisão redefinida neste navegador. Nada foi enviado.");
   }
 
   async function persistForExport(): Promise<void> {
@@ -201,6 +229,12 @@ export function App() {
 
   return (
     <>
+      {STATIC ? (
+        <div className="static-notice" role="status" data-testid="static-notice">
+          Demo com dados sintéticos, sem integrações ativas. GitHub e ClickUp desligados. Nada é
+          coletado.
+        </div>
+      ) : null}
       <div className="banner" role="note">
         DADOS FICTÍCIOS / SYNTHETIC FIXTURES — este rascunho não descreve realizações reais de Helison
         Dias. Fontes: arquivos locais rotulados synthetic-fixture. Adaptadores GitHub e ClickUp:
@@ -344,12 +378,14 @@ export function App() {
                   Um humano ainda precisa aprovar o texto.
                 </p>
                 <div className="actions">
-                  <button className="btn" type="button" onClick={downloadMd}>
+                  <button className="btn" type="button" onClick={() => void downloadMd()}>
                     Baixar Markdown
                   </button>
-                  <a className="btn secondary" href="/api/export.md">
-                    Abrir /api/export.md
-                  </a>
+                  {STATIC ? null : (
+                    <a className="btn secondary" href="/api/export.md">
+                      Abrir /api/export.md
+                    </a>
+                  )}
                 </div>
                 <pre data-testid="export-preview" data-review-applied="true">
                   {reviewedMarkdown}
@@ -380,6 +416,9 @@ export function App() {
               <div className="actions">
                 <button className="btn" type="button" onClick={() => void persist()}>
                   Salvar decisões localmente
+                </button>
+                <button className="btn secondary" type="button" data-testid="reset-review" onClick={resetReview}>
+                  Redefinir revisão
                 </button>
               </div>
             </div>
