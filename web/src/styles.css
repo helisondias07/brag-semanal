@@ -68,12 +68,17 @@ body { background: radial-gradient(1200px 500px at 10% -10%, #fffaf0, var(--pape
 
 .masthead {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(18rem, 1fr) minmax(0, 22rem);
   gap: 1rem;
   align-items: end;
   border-bottom: 2px solid var(--ink);
   padding-bottom: 1rem;
   margin: 1rem 0 1.25rem;
+  /* `anywhere` no body + `1fr auto` faz min-content da coluna do título
+     virar 1 glifo (ou, com break-word, a palavra mais longa) porque `auto`
+     reserva max-content dos chips. break-word + teto na coluna dos chips
+     devolve largura ao h1/lede sem tirar o wrap do body (necessário em 390). */
+  overflow-wrap: break-word;
 }
 .kicker {
   font-size: 0.78rem;

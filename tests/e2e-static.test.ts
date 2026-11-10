@@ -168,12 +168,28 @@ describe("E2E do build estático (sem backend)", () => {
     }
 
     await assertNoPageOverflow(1440, 900);
-    await page.getByRole("tab", { name: "Exportar Markdown" }).click();
-    await page.screenshot({ path: "/tmp/brag-static-desktop-1440.png", fullPage: true });
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.getByRole("tab", { name: "Contribuições" }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    const masthead = await page.evaluate(() => {
+      const h1 = document.querySelector(".masthead h1");
+      const lede = document.querySelector(".masthead .lede");
+      return {
+        h1Width: h1 ? Math.round(h1.getBoundingClientRect().width) : 0,
+        ledeWidth: lede ? Math.round(lede.getBoundingClientRect().width) : 0,
+      };
+    });
+    rec(`masthead 1440 h1Width=${masthead.h1Width} ledeWidth=${masthead.ledeWidth}`);
+    expect(masthead.h1Width, "h1 masthead 1440").toBeGreaterThan(300);
+    expect(masthead.ledeWidth, "parágrafo assunto 1440").toBeGreaterThan(300);
+    await page.screenshot({ path: "/tmp/brag-static-desktop-1440.png", fullPage: false });
+
     await assertNoPageOverflow(390, 844);
-    await page.getByRole("tab", { name: "Exportar Markdown" }).click();
-    await page.screenshot({ path: "/tmp/brag-static-mobile-390.png", fullPage: true });
-    rec("screenshots /tmp/brag-static-desktop-1440.png /tmp/brag-static-mobile-390.png (aba Exportar)");
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.getByRole("tab", { name: "Contribuições" }).click();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: "/tmp/brag-static-mobile-390.png", fullPage: false });
+    rec("screenshots /tmp/brag-static-desktop-1440.png /tmp/brag-static-mobile-390.png (topo, masthead visível)");
 
     await browser.close();
   }, 180000);
